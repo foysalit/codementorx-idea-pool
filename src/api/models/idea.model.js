@@ -1,5 +1,5 @@
-const moment = require('moment');
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
 const httpStatus = require('http-status');
 const APIError = require('../utils/APIError');
 
@@ -51,7 +51,7 @@ ideaSchema.pre('save', async function save(next) {
   try {
     const avg = (this.impact + this.ease + this.confidence) / 3;
     this.average_score = Number(parseFloat(avg).toFixed(2));
-    
+
     return next();
   } catch (error) {
     return next(error);
@@ -70,9 +70,9 @@ ideaSchema.method({
       let data = this[field];
 
       if (field === 'created_at') {
-        let ts = moment(this.createdAt);
+        const ts = moment(this.createdAt);
         data = ts.unix();
-      };
+      }
 
       transformed[field] = data;
     });
@@ -98,7 +98,7 @@ ideaSchema.statics = {
     if (!page) {
       return [];
     }
-    
+
     const perPage = 10;
     return this.find({})
       .sort({ createdAt: -1 })

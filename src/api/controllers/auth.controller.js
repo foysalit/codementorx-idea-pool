@@ -53,7 +53,7 @@ exports.login = async (req, res, next) => {
 exports.logout = async (req, res, next) => {
   try {
     const { refresh_token } = req.body;
-    
+
     await RefreshToken.findOneAndRemove({
       token: refresh_token,
     });

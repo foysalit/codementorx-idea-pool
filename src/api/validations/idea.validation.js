@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const Idea = require('../models/idea.model');
 
 module.exports = {
 
