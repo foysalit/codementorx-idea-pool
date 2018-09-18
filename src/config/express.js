@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
+const bodyParser = require('express-busboy');
 const compress = require('compression');
 const methodOverride = require('method-override');
 const cors = require('cors');
@@ -21,8 +21,9 @@ const app = express();
 app.use(morgan(logs));
 
 // parse body params and attache them to req.body
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+bodyParser.extend(app);
 
 // gzip compression
 app.use(compress());

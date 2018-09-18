@@ -1,3 +1,4 @@
+const moment = require('moment');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../utils/APIError');
@@ -66,11 +67,14 @@ ideaSchema.method({
     const fields = ['id', 'content', 'impact', 'ease', 'confidence', 'average_score', 'created_at'];
 
     fields.forEach((field) => {
-      let dbField = field;
+      let data = this[field];
 
-      if (field === 'created_at') dbField = 'createdAt';
+      if (field === 'created_at') {
+        let ts = moment(this.createdAt);
+        data = ts.unix();
+      };
 
-      transformed[field] = this[dbField];
+      transformed[field] = data;
     });
 
     return transformed;
@@ -89,8 +93,12 @@ ideaSchema.statics = {
    * @returns {Promise<User[]>}
    */
   list({
-    page = 1,
+    page = 0,
   }) {
+    if (!page) {
+      return [];
+    }
+    
     const perPage = 10;
     return this.find({})
       .sort({ createdAt: -1 })
