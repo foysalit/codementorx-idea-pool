@@ -1,6 +1,7 @@
 const express = require('express');
 const userRoutes = require('./user.route');
 const authRoutes = require('./auth.route');
+const ideaRoutes = require('./idea.route');
 
 const router = express.Router();
 
@@ -14,7 +15,8 @@ router.get('/status', (req, res) => res.send('OK'));
  */
 router.use('/docs', express.static('docs'));
 
-router.use('/users', userRoutes);
-router.use('/auth', authRoutes);
+router.use('/ideas', ideaRoutes);
+router.use('/me', userRoutes);
+router.use('/', authRoutes);
 
 module.exports = router;

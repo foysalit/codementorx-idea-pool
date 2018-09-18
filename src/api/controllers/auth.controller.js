@@ -24,10 +24,9 @@ function generateTokenResponse(user, accessToken) {
 exports.register = async (req, res, next) => {
   try {
     const user = await (new User(req.body)).save();
-    const userTransformed = user.transform();
     const token = generateTokenResponse(user, user.token());
     res.status(httpStatus.CREATED);
-    return res.json({ token, user: userTransformed });
+    return res.json({ jwt: token.accessToken, refresh_token: token.refreshToken });
   } catch (error) {
     return next(User.checkDuplicateEmail(error));
   }
@@ -41,8 +40,25 @@ exports.login = async (req, res, next) => {
   try {
     const { user, accessToken } = await User.findAndGenerateToken(req.body);
     const token = generateTokenResponse(user, accessToken);
-    const userTransformed = user.transform();
-    return res.json({ token, user: userTransformed });
+    return res.json({ jwt: token.accessToken, refresh_token: token.refreshToken });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+/**
+ * Returns jwt token if valid username and password is provided
+ * @public
+ */
+exports.logout = async (req, res, next) => {
+  try {
+    const { refresh_token } = req.body;
+    
+    await RefreshToken.findOneAndRemove({
+      token: refresh_token,
+    });
+
+    return res.status(httpStatus.NO_CONTENT).end();
   } catch (error) {
     return next(error);
   }
@@ -71,14 +87,13 @@ exports.oAuth = async (req, res, next) => {
  */
 exports.refresh = async (req, res, next) => {
   try {
-    const { email, refreshToken } = req.body;
+    const { refresh_token } = req.body;
     const refreshObject = await RefreshToken.findOneAndRemove({
-      userEmail: email,
-      token: refreshToken,
+      token: refresh_token,
     });
-    const { user, accessToken } = await User.findAndGenerateToken({ email, refreshObject });
+    const { user, accessToken } = await User.findAndGenerateToken({ refreshObject });
     const response = generateTokenResponse(user, accessToken);
-    return res.json(response);
+    return res.json({ jwt: response.refreshToken });
   } catch (error) {
     return next(error);
   }

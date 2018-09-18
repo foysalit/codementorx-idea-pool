@@ -12,7 +12,7 @@ const {
 const router = express.Router();
 
 /**
- * @api {post} v1/auth/register Register
+ * @api {post} v1/register Register
  * @apiDescription Register a new user
  * @apiVersion 1.0.0
  * @apiName Register
@@ -38,12 +38,12 @@ const router = express.Router();
  *
  * @apiError (Bad Request 400)  ValidationError  Some parameters may contain invalid values
  */
-router.route('/register')
+router.route('/users')
   .post(validate(register), controller.register);
 
 
 /**
- * @api {post} v1/auth/login Login
+ * @api {post} v1/login Login
  * @apiDescription Get an accessToken
  * @apiVersion 1.0.0
  * @apiName Login
@@ -63,18 +63,31 @@ router.route('/register')
  * @apiSuccess  {String}  user.id             User's id
  * @apiSuccess  {String}  user.name           User's name
  * @apiSuccess  {String}  user.email          User's email
- * @apiSuccess  {String}  user.role           User's role
  * @apiSuccess  {Date}    user.createdAt      Timestamp
  *
  * @apiError (Bad Request 400)  ValidationError  Some parameters may contain invalid values
  * @apiError (Unauthorized 401)  Unauthorized     Incorrect email or password
  */
-router.route('/login')
-  .post(validate(login), controller.login);
+router.route('/access-tokens')
+  .post(validate(login), controller.login)
+  /**
+   * @api {patch} v1/access-token Logout user
+   * @apiDescription Logout a user
+   * @apiVersion 1.0.0
+   * @apiName LogoutUser
+   * @apiGroup Auth
+   * @apiPermission user
+   *
+   * @apiSuccess (No Content 204)  Successfully deleted
+   *
+   * @apiError (Unauthorized 401) Unauthorized  Only logged in user can logout
+   * @apiError (Not Found 404)    NotFound      User does not exist
+   */
+  .delete(validate(refresh), controller.logout);
 
 
 /**
- * @api {post} v1/auth/refresh-token Refresh Token
+ * @api {post} v1/refresh-token Refresh Token
  * @apiDescription Refresh expired accessToken
  * @apiVersion 1.0.0
  * @apiName RefreshToken
@@ -92,17 +105,17 @@ router.route('/login')
  * @apiError (Bad Request 400)  ValidationError  Some parameters may contain invalid values
  * @apiError (Unauthorized 401)  Unauthorized     Incorrect email or refreshToken
  */
-router.route('/refresh-token')
+router.route('/access-tokens/refresh')
   .post(validate(refresh), controller.refresh);
 
 
 /**
- * TODO: POST /v1/auth/reset-password
+ * TODO: POST /v1/reset-password
  */
 
 
 /**
- * @api {post} v1/auth/facebook Facebook Login
+ * @api {post} v1/facebook Facebook Login
  * @apiDescription Login with facebook. Creates a new user if it does not exist
  * @apiVersion 1.0.0
  * @apiName FacebookLogin
@@ -123,7 +136,7 @@ router.route('/facebook')
   .post(validate(oAuth), oAuthLogin('facebook'), controller.oAuth);
 
 /**
- * @api {post} v1/auth/google Google Login
+ * @api {post} v1/google Google Login
  * @apiDescription Login with google. Creates a new user if it does not exist
  * @apiVersion 1.0.0
  * @apiName GoogleLogin
