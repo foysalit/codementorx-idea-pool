@@ -1,5 +1,5 @@
 # CodementorX idea pool api
-Built using express es2017 api boilerplate. You can find the live api [here](https://codementorx-idea-pool-cuerobgvli.now.sh).
+Built using express es2017 api boilerplate. You can find the live api [here](https://codementorx-ojuiwixbyh.now.sh/v1). and the documentation for the api can be found [here](https://codementorx-ojuiwixbyh.now.sh/v1/docs).
 
 # Express ES2017 REST API Boilerplate
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![npm version](https://badge.fury.io/js/express-rest-es2017-boilerplate.svg)](https://badge.fury.io/js/express-rest-es2017-boilerplate) [![Build Status](https://travis-ci.org/danielfsousa/express-rest-es2017-boilerplate.svg?branch=master)](https://travis-ci.org/danielfsousa/express-rest-es2017-boilerplate) [![Coverage Status](https://coveralls.io/repos/github/danielfsousa/express-rest-es2017-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/danielfsousa/express-rest-es2017-boilerplate?branch=master)[![Greenkeeper badge](https://badges.greenkeeper.io/danielfsousa/express-rest-es2017-boilerplate.svg)](https://greenkeeper.io/)
